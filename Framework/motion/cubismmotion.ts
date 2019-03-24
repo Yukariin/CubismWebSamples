@@ -208,7 +208,7 @@ export namespace Live2DCubismFramework
                                             ? 1.0
                                             : CubismMath.getEasingSine((motionQueueEntry.getEndTime() - userTimeSeconds) / this._fadeOutSeconds);
             let value: number;
-            let c: number, parameterIndex: number;
+            let c: number, parameterIndex: number, partIndex: number;
 
             // 'Repeat' time as necessary.
             let time: number = timeOffsetSeconds;
@@ -370,11 +370,11 @@ export namespace Live2DCubismFramework
 
             for(; c < this._motionData.curveCount && curves.at(c).type == CubismMotionCurveTarget.CubismMotionCurveTarget_PartOpacity; ++c)
             {
-                // Find parameter index.
-                parameterIndex = model.getParameterIndex(curves.at(c).id);
+                // Find part index.
+                partIndex = model.getPartIndex(curves.at(c).id);
 
                 // Skip curve evaluation if no value in sink.
-                if(parameterIndex == -1)
+                if(partIndex == -1)
                 {
                     continue;
                 }
@@ -382,7 +382,7 @@ export namespace Live2DCubismFramework
                 // Evaluate curve and apply value.
                 value = evaluateCurve(this._motionData, c, time);
 
-                model.setParameterValueByIndex(parameterIndex, value);
+                model.setPartOpacityByIndex(partIndex, value);
             }
 
             if(timeOffsetSeconds >= this._motionData.duration)
